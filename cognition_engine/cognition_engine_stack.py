@@ -14,6 +14,6 @@ class CognitionEngineStack(Stack):
                                         self,
                                         "CognitionEngineLambda",
                                         runtime=_lambda.Runtime.PYTHON_3_7,
-                                        code=_lambda.Code.from_asset("src/cognition_engine_lambda"),
-                                        handler='cognition_engine_lambda.cognition_engine_handler',
+                                        code=_lambda.Code.from_asset("src"),
+                                        handler='cognition_engine_lambda.cognition_engine_lambda.cognition_engine_handler',
                                         )
