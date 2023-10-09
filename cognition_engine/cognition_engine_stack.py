@@ -13,7 +13,8 @@ class CognitionEngineStack(Stack):
         cognition_engine_lambda = _lambda.Function(
                                         self,
                                         "CognitionEngineLambda",
+                                        function_name="CognitionEngineLambda",
                                         runtime=_lambda.Runtime.PYTHON_3_7,
-                                        code=_lambda.Code.from_asset("src"),
-                                        handler='cognition_engine_lambda.cognition_engine_lambda.cognition_engine_handler',
+                                        code=_lambda.Code.from_asset(path="CognitionEngineLambda"),
+                                        handler='lambda_handler',
                                         )
