@@ -1,6 +1,5 @@
 from typing import Dict
 from models.enums import EventType
-from models.events.cognition_engine_event import CognitionEngineEvent
 from services.retrieval_service import RetrievalServiceInstance
 from models.response_dtos.lambda_response import LambdaResponse
 from utils.log_utils import kclogger

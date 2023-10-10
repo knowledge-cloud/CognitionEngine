@@ -1,6 +1,8 @@
 from enum import Enum
+from models.enums import KnowledgeBaseIndex
 from storages.retrievers.weaviate_storage_retrievers import WeaviateStorageRetriever
 from llama_index.vector_stores.types import VectorStoreQueryResult
+from utils.log_utils import kclogger
 
 
 class StorageRetrieversError(Exception):
@@ -17,11 +19,15 @@ class StorageRetrievers:
     def query_from_storage(
             self, 
             embedding: list[float], 
-            top_k: int, schema: str, 
+            top_k: int, 
+            schema: KnowledgeBaseIndex, 
             storageSource: StorageSource
     ) -> VectorStoreQueryResult:
+        kclogger.info(f"StorageRetrievers::query_from_storage called with schema: {schema} and storageSource: {storageSource}")
         if storageSource == StorageSource.WEAVIATE:
-            self.weaviate_storage.query(embedding, top_k, schema)
+            result = self.weaviate_storage.query(embedding=embedding, top_k=top_k, schema=schema.value)
+            kclogger.info(f"StorageRetrievers::query_from_storage fetched total of {len(result.nodes)} results")
+            return result
         else:
             raise StorageRetrieversError("Invalid storage source")
 

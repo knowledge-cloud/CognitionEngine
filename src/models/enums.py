@@ -6,3 +6,4 @@ class EventType(Enum):
 
 class KnowledgeBaseIndex(Enum):
     UPSC = "UpscIndex"
+    KC = "KCIndex"

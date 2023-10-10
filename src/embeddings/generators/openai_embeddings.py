@@ -1,10 +1,13 @@
 from typing import List
+# from dotenv import load_dotenv
 from llama_index.embeddings import OpenAIEmbedding
 import os
+from utils.log_utils import kclogger
 
 class OpenAIEmbeddings:
     def __init__(self):
-        openaiApiKey = os.environ.get("OPENAI_API_KEY")
+        # load_dotenv()
+        openaiApiKey = os.environ.get('OPENAI_API_KEY')
         self.model = OpenAIEmbedding(api_key=openaiApiKey)
 
     def generate_embedding(self, text: str) -> List[float]:
