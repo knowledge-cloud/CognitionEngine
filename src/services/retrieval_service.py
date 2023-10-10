@@ -5,6 +5,7 @@ from embeddings.generators.embedding_generator import EmbeddingSource, generate_
 from utils.log_utils import kclogger
 from utils.log_utils import LogUtils
 from storages.retrievers.storage_retrievers import query_from_storage, StorageSource
+from response_synthesizers.summary_synthesizer import synthesize_summary
 
 
 class RetrievalService:
@@ -14,20 +15,22 @@ class RetrievalService:
 
         query = request.query
         query_embedding = generate_embedding(text=query, embedding_source=EmbeddingSource.OPENAI)
-        nearest_nodes = query_from_storage(
+        query_result = query_from_storage(
             embedding=query_embedding, 
             top_k=1, 
-            schema=request.schema, 
+            schema=request.knowledgeBaseIndex, 
             storageSource=StorageSource.WEAVIATE
         )
         
-        data = AnswerRetrievalResponseBuilder(
-            query=request.query,
-            result="Hello World"
+        text_chunks = [node.text for node in query_result.nodes]
+        result = synthesize_summary(query=query, text_list=text_chunks)
+        response_data = AnswerRetrievalResponseBuilder(
+            query=query,
+            result=result
         )
         return AnswerRetrievalResponse(
             statusCode=200,
-            body=data
+            body=response_data
         )
     
 RetrievalServiceInstance = RetrievalService()

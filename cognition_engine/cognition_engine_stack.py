@@ -1,18 +1,17 @@
 from aws_cdk import (
-    # Duration,
+    Duration,
     Stack,
     aws_lambda as _lambda,
     aws_secretsmanager,
 )
 from constructs import Construct
-import os
 
 class CognitionEngineStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        environment = {
+        environment_variables = {
             "OPENAI_API_KEY": aws_secretsmanager.Secret.from_secret_name_v2(self, "OpenAiSecretKey", secret_name="COGNITION_EGINE").secret_value.to_string(),
             "LLAMA_7B_MODEL": aws_secretsmanager.Secret.from_secret_name_v2(self, "Llama7BModel", secret_name="COGNITION_EGINE").secret_value.to_string(),
             "ANYSCALE_API_KEY": aws_secretsmanager.Secret.from_secret_name_v2(self, "AnyscaleApiKey", secret_name="COGNITION_EGINE").secret_value.to_string(),
@@ -26,5 +25,8 @@ class CognitionEngineStack(Stack):
                                         runtime=_lambda.Runtime.PYTHON_3_7,
                                         code=_lambda.Code.from_asset("src"),
                                         handler='lambda_function.lambda_handler',
-                                        environment=environment,
+                                        # environment={
+                                        #     "Variables": environment_variables
+                                        # },
+                                        timeout=Duration.seconds(60),
                                         )
