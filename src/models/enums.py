@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class EventType(Enum):
     RETRIEVAL = "RETRIEVAL"
     INGESTION = "INGESTION"
