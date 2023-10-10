@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import List
 from embeddings.generators.openai_embeddings import OpenAIEmbeddings
+from utils.log_utils import kclogger
 
 class EmbeddingGeneratorError(Exception):
     pass
@@ -13,9 +15,12 @@ class EmbeddingGenerator:
     def __init__(self):
         self.openai_embedding_generator = OpenAIEmbeddings()
     
-    def generateEmbedding(self, text, embedding_source: EmbeddingSource):
+    def generate_embedding(self, text: str, embedding_source: EmbeddingSource) -> List[float]:
+        kclogger.info(f"EmbeddingGenerator::generate_embedding called with text: {text} and embedding_source: {embedding_source}")
         if embedding_source == EmbeddingSource.OPENAI:
             return self.openai_embedding_generator.generate_embedding(text)
         else:
             raise EmbeddingGeneratorError("Invalid embedding source")
         
+EmbeddingGeneratorInstance = EmbeddingGenerator()
+generate_embedding = EmbeddingGeneratorInstance.generate_embedding

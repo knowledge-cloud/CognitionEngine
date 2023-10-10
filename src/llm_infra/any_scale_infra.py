@@ -8,3 +8,5 @@ class AnyScaleInfra:
     def getLLM(self, model: str):
         llm = Anyscale(model=model, api_key=self.api_key)
         return llm
+
+AnyScaleInfraInstance = AnyScaleInfra()

@@ -4,4 +4,4 @@ from models.enums import KnowledgeBaseIndex
 
 class QuestionRetrievalRequest(BaseModel):
     query: str
-    knowledge_base_index: KnowledgeBaseIndex
+    knowledgeBaseIndex: KnowledgeBaseIndex

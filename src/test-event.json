@@ -1,0 +1,7 @@
+{
+    "eventType": "RETRIEVAL",
+    "data": {
+      "query": "hi",
+      "knowledgeBaseIndex": "UpscIndex"
+    }
+}
