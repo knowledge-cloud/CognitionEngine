@@ -1,3 +1,7 @@
+#remove this line when deploying to AWS
+from dotenv import load_dotenv
+load_dotenv()
+
 from typing import Dict
 from models.enums import EventType
 from services.retrieval_service import RetrievalServiceInstance
