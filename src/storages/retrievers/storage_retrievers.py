@@ -25,7 +25,8 @@ class StorageRetrievers:
     ) -> VectorStoreQueryResult:
         kclogger.info(f"StorageRetrievers::query_from_storage called with schema: {schema} and storageSource: {storageSource}")
         if storageSource == StorageSource.WEAVIATE:
-            result = self.weaviate_storage.query(embedding=embedding, top_k=top_k, schema=schema.value)
+            # TODO - remove this hardcoding of schema
+            result = self.weaviate_storage.query(embedding=embedding, top_k=top_k, schema="KCIndex")
             kclogger.info(f"StorageRetrievers::query_from_storage fetched total of {len(result.nodes)} results")
             return result
         else:
