@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import List
-from embeddings.generators.openai_embeddings import OpenAIEmbeddings
 from utils.log_utils import kclogger
+from embeddings.generators.openai_embeddings import OpenAIEmbeddings
+
 
 class EmbeddingGeneratorError(Exception):
     pass
