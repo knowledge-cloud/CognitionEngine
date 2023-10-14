@@ -1,8 +1,8 @@
 from enum import Enum
-from models.enums import KnowledgeBaseIndex
+from data_models.enums import KnowledgeBaseIndex
+from utils.log_utils import kclogger
 from storages.retrievers.weaviate_storage_retrievers import WeaviateStorageRetriever
 from llama_index.vector_stores.types import VectorStoreQueryResult
-from utils.log_utils import kclogger
 
 
 class StorageRetrieversError(Exception):

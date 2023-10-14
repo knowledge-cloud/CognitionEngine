@@ -1,8 +1,8 @@
 from typing import Dict
-from models.response_dtos.answer_retrieval_response import AnswerRetrievalResponse, AnswerRetrievalResponseBuilder
-from models.request_dtos.question_retrieval_request import QuestionRetrievalRequest
-from embeddings.generators.embedding_generator import EmbeddingSource, generate_embedding
+from data_models.response_dtos.answer_retrieval_response import AnswerRetrievalResponse, AnswerRetrievalResponse
+from data_models.request_dtos.question_retrieval_request import QuestionRetrievalRequest
 from utils.log_utils import kclogger
+from embeddings.generators.embedding_generator import EmbeddingSource, generate_embedding
 from utils.log_utils import LogUtils
 from storages.retrievers.storage_retrievers import query_from_storage, StorageSource
 from response_synthesizers.summary_synthesizer import synthesize_summary
@@ -24,13 +24,10 @@ class RetrievalService:
         
         text_chunks = [node.text for node in query_result.nodes]
         result = synthesize_summary(query=query, text_list=text_chunks)
-        response_data = AnswerRetrievalResponseBuilder(
-            query=query,
-            result=result
-        )
         return AnswerRetrievalResponse(
-            statusCode=200,
-            body=response_data
+            question=query,
+            answer=result
         )
+    
     
 RetrievalServiceInstance = RetrievalService()
