@@ -1,8 +1,9 @@
+from typing import List
+from langchain.schema.document import Document
 from enum import Enum
 from data_models.enums import KnowledgeBaseIndex
 from utils.log_utils import kclogger
 from storages.retrievers.weaviate_storage_retrievers import WeaviateStorageRetriever
-from llama_index.vector_stores.types import VectorStoreQueryResult
 
 
 class StorageRetrieversError(Exception):
@@ -22,12 +23,12 @@ class StorageRetrievers:
             top_k: int, 
             schema: KnowledgeBaseIndex, 
             storageSource: StorageSource
-    ) -> VectorStoreQueryResult:
+    ) -> List[Document]:
         kclogger.info(f"StorageRetrievers::query_from_storage called with schema: {schema} and storageSource: {storageSource}")
         if storageSource == StorageSource.WEAVIATE:
             # TODO - remove this hardcoding of schema
             result = self.weaviate_storage.query(embedding=embedding, top_k=top_k, schema="KCIndex")
-            kclogger.info(f"StorageRetrievers::query_from_storage fetched total of {len(result.nodes)} results")
+            kclogger.info(f"StorageRetrievers::query_from_storage fetched total of {len(result)} results")
             return result
         else:
             raise StorageRetrieversError("Invalid storage source")

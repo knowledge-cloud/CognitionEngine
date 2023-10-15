@@ -1,5 +1,5 @@
 from utils.log_utils import kclogger
-from llama_index.llms.anyscale import Anyscale
+from langchain.llms.anyscale import Anyscale
 from aws_utils.secrets_manager import get_secret
 
 class AnyScaleInfra:
@@ -7,9 +7,10 @@ class AnyScaleInfra:
         kclogger.info(f"AnyScaleInfra::init called")
         self.api_key = get_secret('AnyscaleApiKey')
         self.model = 'meta-llama/Llama-2-7b-chat-hf'
+        self.api_base_url = 'https://api.endpoints.anyscale.com/v1'
     
     def getLLM(self):
-        llm = Anyscale(model=self.model, api_key=self.api_key)
+        llm = Anyscale(model=self.model, anyscale_api_key=self.api_key, anyscale_api_base=self.api_base_url)
         return llm
 
 AnyScaleInfraInstance = AnyScaleInfra()

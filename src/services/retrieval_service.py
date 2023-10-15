@@ -22,7 +22,7 @@ class RetrievalService:
             storageSource=StorageSource.WEAVIATE
         )
         
-        text_chunks = [node.text for node in query_result.nodes]
+        text_chunks = [doc.page_content for doc in query_result]
         result = synthesize_summary(query=query, text_list=text_chunks)
         return AnswerRetrievalResponse(
             question=query,
