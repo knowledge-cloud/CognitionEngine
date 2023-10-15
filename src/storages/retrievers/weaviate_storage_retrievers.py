@@ -1,8 +1,7 @@
 from utils.log_utils import kclogger
-import weaviate
-from weaviate import AuthApiKey
-from llama_index.vector_stores import WeaviateVectorStore
-from llama_index.vector_stores.types import VectorStoreQuery, VectorStoreQueryResult
+from typing import List
+from langchain.schema.document import Document
+from langchain.vectorstores import weaviate
 from aws_utils.secrets_manager import get_secret
 import time
 
@@ -12,13 +11,19 @@ class WeaviateStorageRetriever:
         kclogger.info(f"WeaviateStorageRetriever::init called")
         url = get_secret('WeaviateUrl')
         weaviate_key = get_secret('WeaviateApiKey')
-        auth_config = AuthApiKey(api_key=weaviate_key)
-        self.weaviate_client = weaviate.Client(url, auth_client_secret=auth_config)
+        self.weaviate_client = weaviate._create_weaviate_client(url=url, api_key=weaviate_key)
 
-    def query(self, embedding: list[float], top_k: int, schema: str) -> VectorStoreQueryResult:
+    def query(self, embedding: list[float], top_k: int, schema: str) -> List[Document]:
         start_time = time.time()
-        weaviate_store = WeaviateVectorStore(weaviate_client=self.weaviate_client, index_name=schema)
-        store_query = VectorStoreQuery(query_embedding=embedding, similarity_top_k=top_k, mode="default")
-        result = weaviate_store.query(store_query)
+        attributes = ["text"]
+        weaviate_store = weaviate.Weaviate(
+            client=self.weaviate_client, 
+            index_name=schema, 
+            text_key="text", 
+            attributes=attributes
+        )
+        result = weaviate_store.similarity_search_by_vector(embedding=embedding, k=top_k, include_vector=False)
+        kclogger.info(f"WeaviateStorageRetriever::query fetched total of {len(result)} results")
         kclogger.info(f"WeaviateStorageRetriever::query took {time.time() - start_time} seconds")
         return result
+    
