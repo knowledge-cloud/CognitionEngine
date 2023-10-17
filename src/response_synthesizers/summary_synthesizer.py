@@ -4,6 +4,7 @@ from llama_index import ServiceContext
 from llama_index.response_synthesizers import Refine
 from llm_infra.any_scale_infra import AnyScaleInfraInstance
 from llm_infra.cloudflare_infra import CloudflareInfraInstance
+from llama_index.llms.openai import OpenAI
 
 import time
 
@@ -16,7 +17,7 @@ class SummarySynthesizer:
     def synthesize_summary(self, query: str, text_list: List[str]) -> str:
         start_time = time.time()
         kclogger.info(f"SummarySynthesizer::synthesize_summary summarizing for query: {query}")
-        llm = self.anyscale_infra.getLLM()
+        llm = OpenAI(model="gpt-3.5-turbo")
         service_context = ServiceContext.from_defaults(llm=llm)
         summarizer = Refine(service_context=service_context, verbose=True)
         summary = summarizer.get_response(query_str=query, text_chunks=text_list)

@@ -20,5 +20,7 @@ class WeaviateStorageRetriever:
         weaviate_store = WeaviateVectorStore(weaviate_client=self.weaviate_client, index_name=schema)
         store_query = VectorStoreQuery(query_embedding=embedding, similarity_top_k=top_k, mode="default")
         result = weaviate_store.query(store_query)
+        for node in result.nodes:
+            kclogger.info(f"WeaviateStorageRetriever::query fetched node: {node.text}")
         kclogger.info(f"WeaviateStorageRetriever::query took {time.time() - start_time} seconds")
         return result

@@ -16,5 +16,6 @@ class OpenAIEmbeddings:
         start_time = time.time()
         embedding = self.model.get_query_embedding(text)
         kclogger.info(f"OpenAIEmbeddings::generate_embedding took {time.time() - start_time} seconds")
+        print(embedding)
         return embedding
     
