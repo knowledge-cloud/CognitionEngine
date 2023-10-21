@@ -1,0 +1,7 @@
+{
+    "eventType": "RETRIEVAL",
+    "data": {
+      "query": "What is NDMA?",
+      "knowledgeBaseIndex": "KCIndex"
+    }
+}
