@@ -1,7 +1,9 @@
+import json
+
 import boto3
 from botocore.exceptions import ClientError
+
 from utils.log_utils import kclogger
-import json
 
 
 class SecretsManager:
@@ -15,9 +17,11 @@ class SecretsManager:
 
     def get_secret(self, secret_key: str) -> str:
         try:
-            get_secret_value_response = self.client.get_secret_value(SecretId=self.secret_name)
+            get_secret_value_response = self.client.get_secret_value(
+                SecretId=self.secret_name)
         except ClientError as e:
-            kclogger.error(f"SecretsManager::get_secret failed with {e.response}")
+            kclogger.error(
+                f"SecretsManager::get_secret failed with {e.response}")
             raise e
         else:
             if 'SecretString' in get_secret_value_response:
@@ -26,7 +30,9 @@ class SecretsManager:
                 secret_json = json.loads(secret_string)
                 return secret_json[secret_key]
             else:
-                raise Exception("SecretsManager::get_secret failed with no secret string")
+                raise Exception(
+                    "SecretsManager::get_secret failed with no secret string")
+
 
 SecretsManagerInstance = SecretsManager()
 get_secret = SecretsManagerInstance.get_secret
